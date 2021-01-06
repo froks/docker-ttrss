@@ -16,10 +16,15 @@ if ($db_type == 'mysql'){
 
 echo 'Configuring database for: ' . $conffile . PHP_EOL;
 
+// check DB_NAME, which will be set automatically for a linked "db" container
+if (!env($ename . '_PORT', '') && !env('DB_HOST') {
+    error('The env ' . $ename .'_PORT or DB_HOST does not exist. Make sure to run with "--link mypostgresinstance:' . $ename . '", or define DB_HOST');
+}
+
 $config = array();
 $config['DB_TYPE'] = $db_type;
-$config['DB_HOST'] = env('DB_HOST', 'localhost'); // env($ename . '_PORT_' . $eport . '_TCP_ADDR');
-$config['DB_PORT'] = env('DB_POST', $eport); // env($ename . '_PORT_' . $eport . '_TCP_PORT');
+$config['DB_HOST'] = env('DB_HOST', env($ename . '_PORT_' . $eport . '_TCP_ADDR', 'localhost'));
+$config['DB_PORT'] = env('DB_PORT', env($ename . '_PORT_' . $eport . '_TCP_PORT', $eport));
 
 // database credentials for this instance
 //   database name (DB_NAME) can be supplied or defaults to "ttrss"

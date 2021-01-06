@@ -3,10 +3,8 @@ Additional things:
 - installs & auto-updates rss_extender (https://github.com/lformella/rss-extender), reachable under /rss_extender
 - install & auto-updates the fever plugin (https://github.com/DigitalDJ/tinytinyrss-fever-plugin)
 
-Database configuration changed host-parameter to `DB_HOST` (default: localhost), and `DB_PORT` (default:  
-standard port `DB_TYPE`).
-Also removed a lot of flexibility in terms of configuration of specific paths for content, and specific git-tags to 
-checkout
+Database configuration allows host-parameter `DB_HOST` and `DB_PORT`.
+Also removed configuration of specific paths for content, and specific git-tags for checkout.
 
 # docker-ttrss
 
