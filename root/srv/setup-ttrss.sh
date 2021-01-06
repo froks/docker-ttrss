@@ -47,29 +47,20 @@ setup_ttrss()
         TTRSS_REPO_URL=https://git.tt-rss.org/git/tt-rss.git
     fi
 
-    if [ -z "$TTRSS_PATH" ]; then
-    	TTRSS_PATH=/var/www/ttrss
-    fi
+    TTRSS_PATH=/var/www/ttrss
 
     TTRSS_PATH_THEMES=${TTRSS_PATH}/themes.local
     TTRSS_PATH_PLUGINS=${TTRSS_PATH}/plugins.local
 
     if [ ! -d ${TTRSS_PATH} ]; then
         mkdir -p ${TTRSS_PATH}
-        if [ -n "$TTRSS_GIT_TAG" ]; then
-            echo "Setup: Setting up Tiny Tiny RSS '$TTRSS_GIT_TAG' ..."
-            cd ${TTRSS_PATH}
-            git init .
-            git fetch --depth=1 ${TTRSS_REPO_URL} refs/tags/${TTRSS_GIT_TAG}:refs/tags/${TTRSS_GIT_TAG}
-            git checkout tags/${TTRSS_GIT_TAG}
-        else
-            echo "Setup: Setting up Tiny Tiny RSS (latest revision) ..."
-            git clone --depth=1 ${TTRSS_REPO_URL} ${TTRSS_PATH}
-        fi
+        echo "Setup: Setting up Tiny Tiny RSS (latest revision) ..."
+        git clone --depth=1 ${TTRSS_REPO_URL} ${TTRSS_PATH}
 
         mkdir -p ${TTRSS_PATH_PLUGINS}
         git clone --depth=1 https://github.com/sepich/tt-rss-mobilize.git ${TTRSS_PATH_PLUGINS}/mobilize
         git clone --depth=1 https://github.com/feediron/ttrss_plugin-feediron.git ${TTRSS_PATH_PLUGINS}/feediron
+        git clone --depth=1 https://github.com/DigitalDJ/tinytinyrss-fever-plugin.git ${TTRSS_PATH_PLUGINS}/fever
 
         mkdir -p ${TTRSS_PATH_THEMES}
         git clone --depth=1 https://github.com/levito/tt-rss-feedly-theme.git ${TTRSS_PATH_THEMES}/levito-feedly-git
@@ -143,6 +134,21 @@ setup_ttrss()
     export TTRSS_THEME_RESET
 }
 
+setup_rssextender()
+{
+    if [ -z "$RSSEXTENDER_REPO_URL" ]; then
+        RSSEXTENDER_REPO_URL=https://github.com/lformella/rss-extender.git
+    fi
+
+    RSSEXTENDER_PATH=/var/www/rssextender
+
+    if [ ! -d ${RSSEXTENDER_PATH} ]; then
+        mkdir -p ${RSSEXTENDER_PATH}
+        echo "Setup: Setting up RSS Extender (latest revision) ..."
+        git clone --depth=1 ${RSSEXTENDER_REPO_URL} ${RSSEXTENDER_PATH}
+    fi
+}
+
 setup_db()
 {
     echo "Setup: Database"
@@ -152,6 +158,7 @@ setup_db()
 
 setup_nginx
 setup_ttrss
+setup_rssextender
 setup_db
 
 echo "Setup: Applying updates ..."

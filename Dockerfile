@@ -1,9 +1,10 @@
 # Using https://github.com/gliderlabs/docker-alpine,
 # plus  https://github.com/just-containers/s6-overlay for a s6 Docker overlay.
-FROM alpine:3.10.1
+FROM alpine:3.12.3
 # Initially was based on work of Christian Lück <christian@lueck.tv>.
+# Most of this is work of Andreas Löffler <andy@x86dev.com> - see README.md for details
 LABEL description="A complete, self-hosted Tiny Tiny RSS (TTRSS) environment." \
-      maintainer="Andreas Löffler <andy@x86dev.com>"
+      maintainer="Florian Roks <flo.githubdocker@debugco.de>"
 
 RUN set -xe && \
     apk update && apk upgrade && \

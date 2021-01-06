@@ -3,8 +3,7 @@
 
 include '/srv/ttrss-utils.php';
 
-if (!env('TTRSS_PATH', ''))
-    $confpath = '/var/www/ttrss/';
+$confpath = '/var/www/ttrss/';
 $conffile = $confpath . 'config.php';
 
 $ename = 'DB';
@@ -17,18 +16,13 @@ if ($db_type == 'mysql'){
 
 echo 'Configuring database for: ' . $conffile . PHP_EOL;
 
-// check DB_NAME, which will be set automatically for a linked "db" container
-if (!env($ename . '_PORT', '')) {
-    error('The env ' . $ename .'_PORT does not exist. Make sure to run with "--link mypostgresinstance:' . $ename . '"');
-}
-
 $config = array();
 $config['DB_TYPE'] = $db_type;
-$config['DB_HOST'] = env($ename . '_PORT_' . $eport . '_TCP_ADDR');
-$config['DB_PORT'] = env($ename . '_PORT_' . $eport . '_TCP_PORT');
+$config['DB_HOST'] = env('DB_HOST', 'localhost'); // env($ename . '_PORT_' . $eport . '_TCP_ADDR');
+$config['DB_PORT'] = env('DB_POST', $eport); // env($ename . '_PORT_' . $eport . '_TCP_PORT');
 
 // database credentials for this instance
-//   database name (DB_NAME) can be supplied or detaults to "ttrss"
+//   database name (DB_NAME) can be supplied or defaults to "ttrss"
 //   database user (DB_USER) can be supplied or defaults to database name
 //   database pass (DB_PASS) can be supplied or defaults to database user
 $config['DB_NAME'] = env($ename . '_NAME', 'ttrss');

@@ -1,4 +1,14 @@
-﻿# docker-ttrss
+﻿Based on the works of https://github.com/x86dev/docker-ttrss
+Additional things:
+- installs & auto-updates rss_extender (https://github.com/lformella/rss-extender), reachable under /rss_extender
+- install & auto-updates the fever plugin (https://github.com/DigitalDJ/tinytinyrss-fever-plugin)
+
+Database configuration changed host-parameter to `DB_HOST` (default: localhost), and `DB_PORT` (default:  
+standard port `DB_TYPE`).
+Also removed a lot of flexibility in terms of configuration of specific paths for content, and specific git-tags to 
+checkout
+
+# docker-ttrss
 
 This Dockerfile installs Tiny Tiny RSS (TT-RSS) with the following features:
 

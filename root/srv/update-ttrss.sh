@@ -3,14 +3,10 @@
 TTRSS_PATH=/var/www/ttrss
 TTRSS_PATH_THEMES=${TTRSS_PATH}/themes.local
 TTRSS_PATH_PLUGINS=${TTRSS_PATH}/plugins.local
+RSSEXTENDER_PATH=/var/www/rss_extender
 
 update_ttrss()
 {
-    if [ -n "$TTRSS_GIT_TAG" ]; then
-        echo "Updating Tiny Tiny RSS disabled (using tag '$TTRSS_GIT_TAG')"
-        return
-    fi
-
     echo "Updating: Tiny Tiny RSS"
     ( cd ${TTRSS_PATH} && git pull origin HEAD )
 }
@@ -28,6 +24,12 @@ update_plugin_feediron()
 {
     echo "Updating: FeedIron"
     ( cd ${TTRSS_PATH_PLUGINS}/feediron && git pull origin HEAD )
+}
+
+update_plugin_fever()
+{
+    echo "Updating: Fever"
+    ( cd ${TTRSS_PATH_PLUGINS}/fever && git pull origin HEAD )
 }
 
 update_themes()
@@ -48,6 +50,12 @@ update_themes()
     ln -f -s ${TTRSS_PATH_THEMES}/gravemind-feedly-git/feedlish.css.map
     ln -f -s ${TTRSS_PATH_THEMES}/gravemind-feedly-git/feedlish-night.css
     ln -f -s ${TTRSS_PATH_THEMES}/gravemind-feedly-git/feedlish-night.css.map
+}
+
+update_rssextender()
+{
+    echo "Updating: RSS Extender"
+    ( cd ${RSSEXTENDER_PATH} && git pull origin HEAD )
 }
 
 update_common()
@@ -72,7 +80,9 @@ update_common()
 update_ttrss
 update_plugin_mobilize
 update_plugin_feediron
+update_plugin_fever
 update_themes
+update_rssextender
 update_common
 
 echo "Update: Done"
