@@ -1,10 +1,44 @@
 ﻿Based on the works of https://github.com/x86dev/docker-ttrss
 Additional things:
-- installs & auto-updates rss_extender (https://github.com/lformella/rss-extender), reachable under /rss_extender
 - install & auto-updates the fever plugin (https://github.com/DigitalDJ/tinytinyrss-fever-plugin)
 
-Database configuration allows host-parameter `DB_HOST` and `DB_PORT`.
-Also removed configuration of specific paths for content, and specific git-tags for checkout.
+Changes:
+- Database configuration allows host-parameter `DB_HOST` and `DB_PORT`, as the DB_PORT... syntax isn't used since docker-compose v2+ anymore.
+- Fixed database creation with mariadb
+- Removed configuration of specific paths for content, and specific git-tags for checkout.
+
+Example docker-compose.yml for mariadb:
+```
+version: '3.1'
+# docker login docker.pkg.github.com <your token>
+services:
+  ttrss-db:
+    image: mariadb:10.5
+    restart: unless-stopped
+    volumes:
+      - c:/temp/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=docker
+    ports:
+      - "3306"
+  ttrss:
+    image: docker.pkg.github.com/froks/docker-ttrss/ttrss:<the version, and/or your image)
+    restart: unless-stopped
+    environment:
+      - DB_ENV_USER=root
+      - DB_ENV_PASS=docker
+      - TTRSS_SELF_URL=http://localhost:8080
+      - TTRSS_PROTO=http
+      - TTRSS_URL=localhost
+      - TTRSS_PORT=8080
+      - DB_TYPE=mysql
+      - DB_HOST=ttrss-db
+      - DB_POST=3306
+    links:
+      - "ttrss-db:ttrss-db"
+    ports:
+      - "127.0.0.1:8080:8080"
+```
 
 # docker-ttrss
 

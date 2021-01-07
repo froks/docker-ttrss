@@ -6,7 +6,6 @@ include '/srv/ttrss-utils.php';
 $confpath = '/var/www/ttrss/';
 $conffile = $confpath . 'config.php';
 
-$ename = 'DB';
 $eport = 5432;
 
 $db_type = env('DB_TYPE','pgsql');
@@ -16,23 +15,18 @@ if ($db_type == 'mysql'){
 
 echo 'Configuring database for: ' . $conffile . PHP_EOL;
 
-// check DB_NAME, which will be set automatically for a linked "db" container
-if (!env($ename . '_PORT', env('DB_HOST'))) {
-    error('The env ' . $ename . '_PORT or DB_HOST does not exist. Make sure to run with "--link mypostgresinstance:' . $ename . '", or define DB_HOST');
-}
-
 $config = array();
 $config['DB_TYPE'] = $db_type;
-$config['DB_HOST'] = env('DB_HOST', env($ename . '_PORT_' . $eport . '_TCP_ADDR', 'localhost'));
-$config['DB_PORT'] = env('DB_PORT', env($ename . '_PORT_' . $eport . '_TCP_PORT', $eport));
+$config['DB_HOST'] = env('DB_HOST', 'db');
+$config['DB_PORT'] = env('DB_PORT', $eport);
 
 // database credentials for this instance
 //   database name (DB_NAME) can be supplied or defaults to "ttrss"
 //   database user (DB_USER) can be supplied or defaults to database name
 //   database pass (DB_PASS) can be supplied or defaults to database user
-$config['DB_NAME'] = env($ename . '_NAME', 'ttrss');
-$config['DB_USER'] = env($ename . '_USER', $config['DB_NAME']);
-$config['DB_PASS'] = env($ename . '_PASS', $config['DB_USER']);
+$config['DB_NAME'] = env('DB_NAME', 'ttrss');
+$config['DB_USER'] = env('DB_USER', $config['DB_NAME']);
+$config['DB_PASS'] = env('DB_PASS', $config['DB_USER']);
 
 if (!dbcheck($config)) {
     echo 'Database login failed, trying to create ...' . PHP_EOL;
@@ -43,12 +37,18 @@ if (!dbcheck($config)) {
     $super = $config;
 
     $super['DB_NAME'] = null;
-    $super['DB_USER'] = env($ename . '_ENV_USER', 'docker');
-    $super['DB_PASS'] = env($ename . '_ENV_PASS', $super['DB_USER']);
+    $super['DB_USER'] = env('DB_ENV_USER', 'docker');
+    $super['DB_PASS'] = env('DB_ENV_PASS', $super['DB_USER']);
 
     $pdo = dbconnect($super);
-    $pdo->exec('CREATE ROLE ' . ($config['DB_USER']) . ' WITH LOGIN PASSWORD ' . $pdo->quote($config['DB_PASS']));
-    $pdo->exec('CREATE DATABASE ' . ($config['DB_NAME']) . ' WITH OWNER ' . ($config['DB_USER']));
+    if($db_type == 'mysql') {
+        $pdo->exec('CREATE USER \'' . ($config['DB_USER']) . '\' IDENTIFIED BY \'' . ($config['DB_PASS']) . '\'');
+        $pdo->exec('CREATE DATABASE ' . ($config['DB_NAME']));
+        $pdo->exec('GRANT ALL PRIVILEGES ON ' . ($config['DB_NAME']) . '.* TO \'' . ($config['DB_USER']) . '\'');
+    } else {
+        $pdo->exec('CREATE ROLE ' . ($config['DB_USER']) . ' WITH LOGIN PASSWORD ' . $pdo->quote($config['DB_PASS']));
+        $pdo->exec('CREATE DATABASE ' . ($config['DB_NAME']) . ' WITH OWNER ' . ($config['DB_USER']));
+    }
     unset($pdo);
 
     if (dbcheck($config)) {
