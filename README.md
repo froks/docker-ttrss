@@ -23,7 +23,7 @@ services:
     image: mariadb:10.5
     restart: unless-stopped
     volumes:
-      - c:/temp/data:/var/lib/mysql
+      - /persistent/data:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=docker
     ports:
