@@ -1,6 +1,9 @@
 # Using https://github.com/gliderlabs/docker-alpine,
 # plus  https://github.com/just-containers/s6-overlay for a s6 Docker overlay.
 FROM alpine:3.12.3
+
+ENV S6_VERSION=v2.1.0.2
+
 # Initially was based on work of Christian Lück <christian@lueck.tv>.
 # Most of this is work of Andreas Löffler <andy@x86dev.com> - see README.md for details
 LABEL description="A complete, self-hosted Tiny Tiny RSS (TTRSS) environment." \
@@ -24,7 +27,7 @@ COPY root /
 
 # Add s6 overlay.
 # Note: Tweak this line if you're running anything other than x86 AMD64 (64-bit).
-RUN curl -L -s https://github.com/just-containers/s6-overlay/releases/download/v1.19.1.1/s6-overlay-amd64.tar.gz | tar xvzf - -C /
+RUN curl -L -s https://github.com/just-containers/s6-overlay/releases/download/$S6_VERSION/s6-overlay-amd64.tar.gz | tar xvzf - -C /
 
 # Add wait-for-it.sh
 ADD https://raw.githubusercontent.com/Eficode/wait-for/master/wait-for /srv
@@ -32,7 +35,6 @@ RUN chmod 755 /srv/wait-for
 
 # Expose Nginx ports.
 EXPOSE 8080
-EXPOSE 4443
 
 # Expose default database credentials via ENV in order to ease overwriting.
 ENV DB_NAME ttrss
@@ -40,6 +42,6 @@ ENV DB_USER ttrss
 ENV DB_PASS ttrss
 
 # Clean up.
-RUN set -xe && apk del --progress --purge && rm -rf /var/cache/apk/* && rm -rf /var/lib/apt/lists/*
+RUN set -xe && apk del --progress --purge && rm -rf /var/cache/apk/* && rm -rf /var/lib/apk/lists/*
 
 ENTRYPOINT ["/init"]

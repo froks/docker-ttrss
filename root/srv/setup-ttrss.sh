@@ -1,52 +1,8 @@
 #!/bin/sh
 
-setup_nginx()
-{
-    if [ -z "$TTRSS_HOST" ]; then
-        TTRSS_HOST=ttrss
-    fi
-
-    NGINX_CONF=/etc/nginx/nginx.conf
-
-    if [ "$TTRSS_WITH_SELFSIGNED_CERT" = "1" ]; then
-        # Install OpenSSL.
-        apk update && apk add openssl
-
-        if [ ! -f "/etc/ssl/private/ttrss.key" ]; then
-            echo "Setup: Generating self-signed certificate ..."
-            # Generate the TLS certificate for our Tiny Tiny RSS server instance.
-            openssl req -new -newkey rsa:4096 -days 3650 -nodes -x509 \
-                -subj "/C=US/ST=World/L=World/O=$TTRSS_HOST/CN=$TTRSS_HOST" \
-                -keyout "/etc/ssl/private/ttrss.key" \
-                -out "/etc/ssl/certs/ttrss.crt"
-        fi
-
-        # Turn on SSL.
-        sed -i -e "s/listen\s*8080\s*;/listen 4443;/g" ${NGINX_CONF}
-        sed -i -e "s/ssl\s*off\s*;/ssl on;/g" ${NGINX_CONF}
-        sed -i -e "s/#ssl_/ssl_/g" ${NGINX_CONF}
-
-        # Set permissions.
-        chmod 600 "/etc/ssl/private/ttrss.key"
-        chmod 600 "/etc/ssl/certs/ttrss.crt"
-    else
-        echo "Setup: !!! WARNING - No encryption (TLS) used - WARNING    !!!"
-        echo "Setup: !!! This is not recommended for a production server !!!"
-        echo "Setup:                You have been warned."
-
-        # Turn off SSL.
-        sed -i -e "s/listen\s*4443\s*;/listen 8080;/g" ${NGINX_CONF}
-        sed -i -e "s/ssl\s*on\s*;/ssl off;/g" ${NGINX_CONF}
-        sed -i -e "s/ssl_/#ssl_/g" ${NGINX_CONF}
-    fi
-}
-
 setup_ttrss()
 {
-    if [ -z "$TTRSS_REPO_URL" ]; then
-        TTRSS_REPO_URL=https://git.tt-rss.org/git/tt-rss.git
-    fi
-
+    TTRSS_REPO_URL=https://git.tt-rss.org/git/tt-rss.git
     TTRSS_PATH=/var/www/ttrss
 
     TTRSS_PATH_THEMES=${TTRSS_PATH}/themes.local
@@ -73,11 +29,6 @@ setup_ttrss()
     # Check if TTRSS_URL is undefined, and if so, use localhost as default.
     if [ -z ${TTRSS_URL} ]; then
         TTRSS_URL=localhost
-    fi
-
-    if [ "$TTRSS_WITH_SELFSIGNED_CERT" = "1" ]; then
-        # Make sure the TTRSS protocol is https now.
-        TTRSS_PROTO=https
     fi
 
     # If no protocol is specified, use http as default. Not secure, I know.
@@ -136,10 +87,7 @@ setup_ttrss()
 
 setup_rssextender()
 {
-    if [ -z "$RSSEXTENDER_REPO_URL" ]; then
-        RSSEXTENDER_REPO_URL=https://github.com/lformella/rss-extender.git
-    fi
-
+    RSSEXTENDER_REPO_URL=https://github.com/lformella/rss-extender.git
     RSSEXTENDER_PATH=/var/www/rss_extender
 
     if [ ! -d ${RSSEXTENDER_PATH} ]; then
@@ -156,7 +104,6 @@ setup_db()
     php -f /srv/ttrss-configure-plugin-mobilize.php
 }
 
-setup_nginx
 setup_ttrss
 setup_rssextender
 setup_db

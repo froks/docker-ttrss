@@ -53,16 +53,16 @@ update_themes()
 
 update_common()
 {
-    if [ -z "$MY_ROOT_UID" ]; then
-        MY_ROOT_UID=0
-    fi
-    if [ -z "$MY_ROOT_GID" ]; then
-        MY_ROOT_GID=0
+    # When called initially by setup, it should set the common permissions once, later - when called as www-data,
+    # setting them would fail
+    CURRENT_UID=$(id -u -n)
+    if [ "$CURRENT_UID" != "root" ]; then
+      return
     fi
 
     echo "Updating: Updating permissions"
     for CUR_DIR in /etc/nginx /etc/php7 /var/lib/nginx /etc/services.d; do
-        chown -R ${MY_ROOT_UID}:${MY_ROOT_GID} ${CUR_DIR}
+        chown -R root:root ${CUR_DIR}
     done
 
     chown -R www-data:www-data ${TTRSS_PATH}

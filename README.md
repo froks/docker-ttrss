@@ -1,11 +1,18 @@
 ﻿Based on the works of https://github.com/x86dev/docker-ttrss
-Additional things:
+
+Additional features:
 - install & auto-updates the fever plugin (https://github.com/DigitalDJ/tinytinyrss-fever-plugin)
 
 Changes:
 - Database configuration allows host-parameter `DB_HOST` and `DB_PORT`, as the DB_PORT... syntax isn't used since docker-compose v2+ anymore.
-- Fixed database creation with mariadb
-- Removed configuration of specific paths for content, and specific git-tags for checkout.
+- Removed configuration of specific paths for content, and specific git-tags for checkout, as well as repository urls to simplify maintenance and improve readability
+- Removed ssl configuration - the intention is to have a tls-terminating nginx before
+
+Fixes:
+- Database creation with mariadb
+- Update-cycle was twice as long as intended, now 24h
+- Updates now don't throw errors dues to missing permissions (runs as www-data, but tried to update system folder permissions) 
+
 
 Example docker-compose.yml for mariadb:
 ```
