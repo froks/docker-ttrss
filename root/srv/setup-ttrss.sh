@@ -140,7 +140,7 @@ setup_rssextender()
         RSSEXTENDER_REPO_URL=https://github.com/lformella/rss-extender.git
     fi
 
-    RSSEXTENDER_PATH=/var/www/rssextender
+    RSSEXTENDER_PATH=/var/www/rss_extender
 
     if [ ! -d ${RSSEXTENDER_PATH} ]; then
         mkdir -p ${RSSEXTENDER_PATH}
