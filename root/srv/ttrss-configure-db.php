@@ -17,8 +17,8 @@ if ($db_type == 'mysql'){
 echo 'Configuring database for: ' . $conffile . PHP_EOL;
 
 // check DB_NAME, which will be set automatically for a linked "db" container
-if (!env($ename . '_PORT', '') && !env('DB_HOST') {
-    error('The env ' . $ename .'_PORT or DB_HOST does not exist. Make sure to run with "--link mypostgresinstance:' . $ename . '", or define DB_HOST');
+if (!env($ename . '_PORT', env('DB_HOST'))) {
+    error('The env ' . $ename . '_PORT or DB_HOST does not exist. Make sure to run with "--link mypostgresinstance:' . $ename . '", or define DB_HOST');
 }
 
 $config = array();
