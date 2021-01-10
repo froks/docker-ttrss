@@ -85,18 +85,6 @@ setup_ttrss()
     export TTRSS_THEME_RESET
 }
 
-setup_rssextender()
-{
-    RSSEXTENDER_REPO_URL=https://github.com/lformella/rss-extender.git
-    RSSEXTENDER_PATH=/var/www/rss_extender
-
-    if [ ! -d ${RSSEXTENDER_PATH} ]; then
-        mkdir -p ${RSSEXTENDER_PATH}
-        echo "Setup: Setting up RSS Extender (latest revision) ..."
-        git clone --depth=1 ${RSSEXTENDER_REPO_URL} ${RSSEXTENDER_PATH}
-    fi
-}
-
 setup_db()
 {
     echo "Setup: Database"
@@ -105,7 +93,6 @@ setup_db()
 }
 
 setup_ttrss
-setup_rssextender
 setup_db
 
 echo "Setup: Applying updates ..."
