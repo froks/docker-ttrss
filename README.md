@@ -14,37 +14,55 @@ Fixes:
 - Updates now don't throw errors dues to missing permissions (runs as www-data, but tried to update system folder permissions) 
 - Separate folder (/shared/feed-icons), so they can be persisted through external volumes
 
+`# docker login docker.pkg.github.com <your token>`
+
 Example docker-compose.yml for mariadb:
+
 ```
 version: '3.1'
-# docker login docker.pkg.github.com <your token>
+
 services:
   ttrss-db:
     image: mariadb:10.5
+    container_name: ttrss-db
     restart: unless-stopped
     volumes:
-      - /persistent/data:/var/lib/mysql
+      - "/persistent/database:/var/lib/mysql"
     environment:
-      - MYSQL_ROOT_PASSWORD=docker
-    ports:
-      - "3306"
+      - MYSQL_ROOT_PASSWORD
+    networks:
+      - ttrss-net
   ttrss:
-    image: docker.pkg.github.com/froks/docker-ttrss/ttrss:<the version, and/or your image)
+    image: docker.pkg.github.com/froks/docker-ttrss/ttrss:0.7
+    container_name: ttrss
     restart: unless-stopped
+    volumes:
+      - "feed-icons:/shared/feed-icons"
     environment:
-      - DB_ENV_USER=root
-      - DB_ENV_PASS=docker
-      - TTRSS_SELF_URL=http://localhost:8080
-      - TTRSS_PROTO=http
       - TTRSS_URL=localhost
       - TTRSS_PORT=8080
       - DB_TYPE=mysql
       - DB_HOST=ttrss-db
-      - DB_POST=3306
+      - DB_PORT=3306
+      - DB_ENV_USER
+      - DB_ENV_PASS
+      - TTRSS_SELF_URL
+      - TTRSS_PROTO
+      - DB_NAME
+      - DB_USER
+      - DB_PASS
     links:
       - "ttrss-db:ttrss-db"
     ports:
       - "127.0.0.1:8080:8080"
+    networks:
+      - ttrss-net
+
+networks:
+  ttrss-net:
+
+volumes:
+  feed-icons:
 ```
 
 # docker-ttrss
