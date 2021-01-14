@@ -24,7 +24,7 @@ setup_ttrss()
         git clone --depth=1 https://github.com/Gravemind/tt-rss-feedlish-theme.git ${TTRSS_PATH_THEMES}/gravemind-feedly-git
     fi
 
-    chown -R 777 "$FEED_ICONS_PATH"
+    chmod -R 777 "$FEED_ICONS_PATH"
 
     # Add initial config.
     cp ${TTRSS_PATH}/config.php-dist ${TTRSS_PATH}/config.php
