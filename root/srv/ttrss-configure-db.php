@@ -16,6 +16,9 @@ if ($db_type == 'mysql'){
 echo 'Configuring database for: ' . $conffile . PHP_EOL;
 
 $config = array();
+
+$config['ICONS_DIR'] = env('FEED_ICONS_PATH', '/shared/feed-icons');
+
 $config['DB_TYPE'] = $db_type;
 $config['DB_HOST'] = env('DB_HOST', 'db');
 $config['DB_PORT'] = env('DB_PORT', $eport);

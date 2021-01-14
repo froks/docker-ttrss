@@ -41,6 +41,10 @@ ENV DB_NAME ttrss
 ENV DB_USER ttrss
 ENV DB_PASS ttrss
 
+ENV FEED_ICONS_PATH /shared/feed-icons
+
+RUN mkdir -p "$FEED_ICONS_PATH"
+
 # Clean up.
 RUN set -xe && apk del --progress --purge && rm -rf /var/cache/apk/* && rm -rf /var/lib/apk/lists/*
 

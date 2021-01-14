@@ -12,7 +12,7 @@ Fixes:
 - Database creation with mariadb
 - Update-cycle was twice as long as intended, now 24h
 - Updates now don't throw errors dues to missing permissions (runs as www-data, but tried to update system folder permissions) 
-
+- Separate folder (/shared/feed-icons), so they can be persisted through external volumes
 
 Example docker-compose.yml for mariadb:
 ```
