@@ -4,6 +4,7 @@ setup_ttrss()
 {
     TTRSS_REPO_URL=https://git.tt-rss.org/git/tt-rss.git
     TTRSS_PATH=/var/www/ttrss
+    FEED_ICONS_PATH=/shared/feed-icons
 
     TTRSS_PATH_THEMES=${TTRSS_PATH}/themes.local
     TTRSS_PATH_PLUGINS=${TTRSS_PATH}/plugins.local
@@ -22,6 +23,8 @@ setup_ttrss()
         git clone --depth=1 https://github.com/levito/tt-rss-feedly-theme.git ${TTRSS_PATH_THEMES}/levito-feedly-git
         git clone --depth=1 https://github.com/Gravemind/tt-rss-feedlish-theme.git ${TTRSS_PATH_THEMES}/gravemind-feedly-git
     fi
+
+    chown -R 777 "$FEED_ICONS_PATH"
 
     # Add initial config.
     cp ${TTRSS_PATH}/config.php-dist ${TTRSS_PATH}/config.php
