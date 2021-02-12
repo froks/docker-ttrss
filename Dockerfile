@@ -1,8 +1,8 @@
 # Using https://github.com/gliderlabs/docker-alpine,
 # plus  https://github.com/just-containers/s6-overlay for a s6 Docker overlay.
-FROM alpine:3.12.3
+FROM alpine:3.13
 
-ENV S6_VERSION=v2.1.0.2
+ENV S6_VERSION=v2.2.0.1
 
 # Initially was based on work of Christian Lück <christian@lueck.tv>.
 # Most of this is work of Andreas Löffler <andy@x86dev.com> - see README.md for details
