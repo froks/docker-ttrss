@@ -46,11 +46,11 @@ services:
       - TTRSS_DB_PORT=3306
       - DB_ENV_USER
       - DB_ENV_PASS
-      - TTRSS_SELF_URL
+      - TTRSS_SELF_URL_PATH
       - TTRSS_PROTO
-      - DB_NAME
-      - DB_USER
-      - DB_PASS
+      - TTRSS_DB_NAME
+      - TTRSS_DB_USER
+      - TTRSS_DB_PASS
     links:
       - "ttrss-db:ttrss-db"
     ports:
