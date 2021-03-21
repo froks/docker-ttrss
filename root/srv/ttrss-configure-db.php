@@ -11,12 +11,14 @@ if (!dbcheck()) {
     //   username (SU_USER) can be supplied or defaults to "docker"
     //   password (SU_PASS) can be supplied or defaults to username
 
+    error('Not yet implemented');
+
     $super['DB_NAME'] = null;
     $super['DB_USER'] = env('DB_ENV_USER', 'docker');
     $super['DB_PASS'] = env('DB_ENV_PASS', $super['DB_USER']);
 
-    $pdo = dbconnect($super);
-    if(env('TTRSS_DB_TYPE', 'pgsql') == 'mysql') {
+    $pdo = dbconnect();
+    if(env('TTRSS_DB_TYPE') == 'mysql') {
         $pdo->exec('CREATE USER \'' . (env('TTRSS_DB_USER')) . '\' IDENTIFIED BY \'' . env('TTRSS_DB_PASS') . '\'');
         $pdo->exec('CREATE DATABASE ' . (env('TTRSS_DB_NAME')));
         $pdo->exec('GRANT ALL PRIVILEGES ON ' . (env('TTRSS_DB_NAME')) . '.* TO \'' . (env('TTRSS_DB_USER')) . '\'');
@@ -48,7 +50,7 @@ try {
 }
 catch (PDOException $e) {
     echo 'Database table not found, applying schema... ' . PHP_EOL;
-    $schema = file_get_contents($confpath . 'schema/ttrss_schema_' . $config['DB_TYPE'] . '.sql');
+    $schema = file_get_contents($confpath . 'schema/ttrss_schema_' . env('TTRSS_DB_TYPE') . '.sql');
     $schema = preg_replace('/--(.*?);/', '', $schema);
     $schema = preg_replace('/[\r\n]/', ' ', $schema);
     $schema = trim($schema, ' ;');

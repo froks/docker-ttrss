@@ -22,12 +22,12 @@ function dbconnect()
     $map = array('host' => 'HOST', 'port' => 'PORT', 'dbname' => 'NAME', 'user' => 'USER', 'password' => 'PASS');
     $dsn = env('TTRSS_DB_TYPE') . ':';
     foreach ($map as $d => $h) {
-        if (isset($config['DB_' . $h])) {
+        if (env('TTRSS_DB_' . $h) != "") {
             $dsn .= $d . '=' . env('TTRSS_DB_' . $h) . ';';
         }
     }
     echo($dsn);
-    if (env('TTRSS_DB_TYPE', 'pgsql') == 'pgsql'){
+    if (env('TTRSS_DB_TYPE') == 'pgsql'){
         $pdo = new \PDO($dsn);
     } else {
         $pdo = new \PDO($dsn, env('TTRSS_DB_USER'), env('TTRSS_DB_PASS'));

@@ -7,13 +7,13 @@
 # This simply duplicates the logic from ttrss-configure-db.php
 eport=5432;
 
-if [ "$DB_TYPE" = 'mysql' ];
+if [ "$TTRSS_DB_TYPE" = 'mysql' ];
 then
 	eport=3306;
-	dbhost=$DB_HOST
+	dbhost=$TTRSS_DB_HOST
 else
 	eport=5432;
-	dbhost=$DB_PORT
+	dbhost=$TTRSS_DB_PORT
 fi
 
 if [ "$dbhost" = '' ];
