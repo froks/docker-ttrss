@@ -41,9 +41,9 @@ services:
     environment:
       - TTRSS_URL=localhost
       - TTRSS_PORT=8080
-      - DB_TYPE=mysql
-      - DB_HOST=ttrss-db
-      - DB_PORT=3306
+      - TTRSS_DB_TYPE=mysql
+      - TTRSS_DB_HOST=ttrss-db
+      - TTRSS_DB_PORT=3306
       - DB_ENV_USER
       - DB_ENV_PASS
       - TTRSS_SELF_URL
@@ -205,9 +205,9 @@ Whenever your run TT-RSS, it will check your database setup. It assumes the foll
 default configuration, which can be changed by passing the following additional arguments:
 
 ```bash
--e DB_NAME=ttrss
--e DB_USER=ttrss
--e DB_PASS=ttrss
+-e TTRSS_DB_NAME=ttrss
+-e TTRSS_DB_USER=ttrss
+-e TTRSS_DB_PASS=ttrss
 ```
 
 By default, a PostgreSQL database is needed.
@@ -216,7 +216,7 @@ By default, a PostgreSQL database is needed.
 
 Specify the following to use an existing MySQL database instead of a PostgreSQL one:
 ```bash
--e DB_TYPE=mysql
+-e TTRSS_DB_TYPE=mysql
 ```
 
 ### Database user

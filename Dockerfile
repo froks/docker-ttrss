@@ -37,14 +37,14 @@ RUN chmod 755 /srv/wait-for
 EXPOSE 8080
 
 # Expose default database credentials via ENV in order to ease overwriting.
-ENV DB_NAME ttrss
-ENV DB_USER ttrss
-ENV DB_PASS ttrss
+ENV TTRSS_DB_TYPE pgsql
+ENV TTRSS_DB_NAME ttrss
+ENV TTRSS_DB_USER ttrss
+ENV TTRSS_DB_PASS ttrss
+ENV TTRSS_ICONS_DIR /shared/feed-icons
 
-ENV FEED_ICONS_PATH /shared/feed-icons
-
-RUN mkdir -p "$FEED_ICONS_PATH"
-RUN chmod -R 777 "$FEED_ICONS_PATH"
+RUN mkdir -p "$TTRSS_ICONS_DIR"
+RUN chmod -R 777 "$TTRSS_ICONS_DIR"
 
 # Clean up.
 RUN set -xe && apk del --progress --purge && rm -rf /var/cache/apk/* && rm -rf /var/lib/apk/lists/*

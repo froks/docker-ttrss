@@ -4,7 +4,7 @@ setup_ttrss()
 {
     TTRSS_REPO_URL=https://git.tt-rss.org/git/tt-rss.git
     TTRSS_PATH=/var/www/ttrss
-    FEED_ICONS_PATH=/shared/feed-icons
+    TTRSS_ICONS_DIR=/shared/feed-icons
 
     TTRSS_PATH_THEMES=${TTRSS_PATH}/themes.local
     TTRSS_PATH_PLUGINS=${TTRSS_PATH}/plugins.local
@@ -24,10 +24,10 @@ setup_ttrss()
         git clone --depth=1 https://github.com/Gravemind/tt-rss-feedlish-theme.git ${TTRSS_PATH_THEMES}/gravemind-feedly-git
     fi
 
-    chmod -R 777 "$FEED_ICONS_PATH"
+    chmod -R 777 "$TTRSS_ICONS_DIR"
 
     # Add initial config.
-    cp ${TTRSS_PATH}/config.php-dist ${TTRSS_PATH}/config.php
+#    cp ${TTRSS_PATH}/config.php-dist ${TTRSS_PATH}/config.php
 
     # Check if TTRSS_URL is undefined, and if so, use localhost as default.
     if [ -z ${TTRSS_URL} ]; then

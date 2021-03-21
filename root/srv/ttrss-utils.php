@@ -17,29 +17,29 @@ function error($text)
     exit(1);
 }
 
-function dbconnect($config)
+function dbconnect()
 {
     $map = array('host' => 'HOST', 'port' => 'PORT', 'dbname' => 'NAME', 'user' => 'USER', 'password' => 'PASS');
-    $dsn = $config['DB_TYPE'] . ':';
+    $dsn = env('TTRSS_DB_TYPE') . ':';
     foreach ($map as $d => $h) {
         if (isset($config['DB_' . $h])) {
-            $dsn .= $d . '=' . $config['DB_' . $h] . ';';
+            $dsn .= $d . '=' . env('TTRSS_DB_' . $h) . ';';
         }
     }
     echo($dsn);
-    if ($config['DB_TYPE'] == 'pgsql'){
+    if (env('TTRSS_DB_TYPE', 'pgsql') == 'pgsql'){
         $pdo = new \PDO($dsn);
     } else {
-        $pdo = new \PDO($dsn, $config['DB_USER'], $config['DB_PASS']);
+        $pdo = new \PDO($dsn, env('TTRSS_DB_USER'), env('TTRSS_DB_PASS'));
     }
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     return $pdo;
 }
 
-function dbcheck($config)
+function dbcheck()
 {
     try {
-        dbconnect($config);
+        dbconnect();
         return true;
     }
     catch (PDOException $e) {
