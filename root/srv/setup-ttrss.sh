@@ -28,6 +28,8 @@ setup_ttrss()
 
     # Add initial config.
 #    cp ${TTRSS_PATH}/config.php-dist ${TTRSS_PATH}/config.php
+    # empty config.php is needed for fever plugin
+    touch ${TTRSS_PATH}/config.php
 
     # Check if TTRSS_URL is undefined, and if so, use localhost as default.
     if [ -z ${TTRSS_URL} ]; then
